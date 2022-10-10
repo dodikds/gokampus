@@ -1,6 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// use App\Models\User;
+use App\Http\Controllers\PostController;
+use Illuminate\Support\Facades\DB;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,12 +20,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Post Controller
+Route::get('/post/all', [PostController::class, 'index'])->name('all.post');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        // $users = User::all();
+        $users = DB::table('users')->get();
+
+        return view('dashboard', compact('users'));
     })->name('dashboard');
 });
